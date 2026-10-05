@@ -85,7 +85,7 @@ The Actor uses pay-per-event pricing. You pay only for the data that lands in th
 | `post` | A post without the body (`includeBody` off, or the body could not be loaded) | $0.001 | $1.00 |
 | `post-with-content` | A post with `bodyHtml` | $0.002 | $2.00 |
 | `comment` | Each comment returned in `comments` | $0.0005 | $0.50 |
-| `apify-actor-start` | Each run, once | $0.00005 | — |
+| `apify-actor-start` | Each run, per GB of memory ($0.0002 at the default 4 GB) | $0.00005 | — |
 
 A post is charged as either `post` or `post-with-content`, never both. When the maximum cost per run that you set is reached, the Actor stops and keeps what it has already saved.
 
