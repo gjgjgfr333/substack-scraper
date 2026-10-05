@@ -1,0 +1,19 @@
+{
+    "$schema": "https://apify.com/schemas/v1/actor.ide.json",
+    "actorSpecification": 1,
+    "name": "substack-scraper",
+    "title": "Substack Scraper",
+    "description": "Scrape posts from any Substack publication: titles, dates, authors, tags, reactions, comments and the post body.",
+    "version": "0.0",
+    "buildTag": "latest",
+    "meta": {
+        "templateId": "ts-crawlee-cheerio",
+        "generatedBy": "Claude Code with Claude Opus 5.5"
+    },
+    "inputSchema": "./input_schema.json",
+    "outputSchema": "./output_schema.json",
+    "storages": {
+        "dataset": "./dataset_schema.json"
+    },
+    "dockerfile": "../Dockerfile"
+}

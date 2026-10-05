@@ -1,0 +1,59 @@
+{
+    "$schema": "https://apify.com/schemas/v1/input.ide.json",
+    "title": "Substack Scraper",
+    "type": "object",
+    "schemaVersion": 1,
+    "properties": {
+        "publications": {
+            "title": "Publications",
+            "type": "array",
+            "description": "Substack publications to scrape. Use a full URL (https://www.lennysnewsletter.com), a domain (example.substack.com) or just the handle (example).",
+            "editor": "stringList",
+            "prefill": ["https://www.lennysnewsletter.com"]
+        },
+        "maxPostsPerPublication": {
+            "title": "Max posts per publication",
+            "type": "integer",
+            "description": "Maximum number of posts to return for each publication.",
+            "minimum": 1,
+            "default": 50
+        },
+        "sort": {
+            "title": "Sort posts by",
+            "type": "string",
+            "description": "Order in which posts are taken from the publication archive.",
+            "editor": "select",
+            "enum": ["new", "top"],
+            "enumTitles": ["Newest first", "Most popular first"],
+            "default": "new"
+        },
+        "includeBody": {
+            "title": "Include post body",
+            "type": "boolean",
+            "description": "Fetch the HTML body of each post. Paid posts return only the part Substack shows publicly. Turning this off makes the run faster.",
+            "default": true
+        },
+        "includeComments": {
+            "title": "Include comments",
+            "type": "boolean",
+            "description": "Fetch public comments for each post, including the names of the people who wrote them.",
+            "default": false
+        },
+        "maxCommentsPerPost": {
+            "title": "Max comments per post",
+            "type": "integer",
+            "description": "Maximum number of comments to return for each post. Used only when comments are included.",
+            "minimum": 1,
+            "default": 100
+        },
+        "proxyConfiguration": {
+            "title": "Proxy configuration",
+            "type": "object",
+            "description": "Proxy servers to use. Substack usually works without a proxy.",
+            "editor": "proxy",
+            "default": { "useApifyProxy": false },
+            "prefill": { "useApifyProxy": false }
+        }
+    },
+    "required": ["publications"]
+}

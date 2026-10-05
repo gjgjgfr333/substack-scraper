@@ -1,0 +1,85 @@
+{
+    "$schema": "https://apify.com/schemas/v1/dataset.ide.json",
+    "actorSpecification": 1,
+    "fields": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+            "publicationUrl": { "type": "string", "description": "Publication the post belongs to" },
+            "postId": { "type": "integer", "description": "Substack post ID" },
+            "url": { "type": "string", "description": "Public URL of the post" },
+            "slug": { "type": "string", "description": "Post slug" },
+            "title": { "type": ["string", "null"], "description": "Post title" },
+            "subtitle": { "type": ["string", "null"], "description": "Post subtitle" },
+            "description": { "type": ["string", "null"], "description": "Short description of the post" },
+            "type": { "type": ["string", "null"], "description": "Post type, e.g. newsletter or podcast" },
+            "audience": {
+                "type": ["string", "null"],
+                "description": "Who can read the post, e.g. everyone or only_paid"
+            },
+            "isPaid": { "type": "boolean", "description": "True when the post is not open to everyone" },
+            "postDate": { "type": ["string", "null"], "description": "Publication date in ISO 8601 format" },
+            "wordCount": { "type": ["integer", "null"], "description": "Number of words in the post" },
+            "reactionCount": { "type": "integer", "description": "Number of reactions (likes)" },
+            "commentCount": { "type": "integer", "description": "Number of comments" },
+            "restackCount": { "type": "integer", "description": "Number of restacks" },
+            "coverImage": { "type": ["string", "null"], "description": "Cover image URL" },
+            "section": { "type": ["string", "null"], "description": "Publication section the post is in" },
+            "tags": { "type": "array", "items": { "type": "string" }, "description": "Post tags" },
+            "authors": {
+                "type": "array",
+                "description": "Post authors",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "name": { "type": ["string", "null"] },
+                        "handle": { "type": ["string", "null"] }
+                    }
+                }
+            },
+            "podcastUrl": { "type": ["string", "null"], "description": "Audio URL for podcast posts" },
+            "previewText": { "type": ["string", "null"], "description": "Plain-text preview of the post" },
+            "bodyHtml": {
+                "type": ["string", "null"],
+                "description": "HTML body of the post, null when the body was not requested or is not available"
+            },
+            "comments": {
+                "type": "array",
+                "description": "Public comments, present only when comments were requested",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "id": { "type": "integer" },
+                        "parentId": { "type": ["integer", "null"] },
+                        "body": { "type": ["string", "null"] },
+                        "date": { "type": ["string", "null"] },
+                        "authorName": { "type": ["string", "null"] },
+                        "authorHandle": { "type": ["string", "null"] },
+                        "reactionCount": { "type": "integer" }
+                    }
+                }
+            }
+        },
+        "required": ["publicationUrl", "postId", "url", "slug"]
+    },
+    "views": {
+        "overview": {
+            "title": "Overview",
+            "transformation": {
+                "fields": ["title", "url", "postDate", "audience", "wordCount", "reactionCount", "commentCount"]
+            },
+            "display": {
+                "component": "table",
+                "properties": {
+                    "title": { "label": "Title", "format": "text" },
+                    "url": { "label": "URL", "format": "link" },
+                    "postDate": { "label": "Published", "format": "date" },
+                    "audience": { "label": "Audience", "format": "text" },
+                    "wordCount": { "label": "Words", "format": "number" },
+                    "reactionCount": { "label": "Reactions", "format": "number" },
+                    "commentCount": { "label": "Comments", "format": "number" }
+                }
+            }
+        }
+    }
+}
