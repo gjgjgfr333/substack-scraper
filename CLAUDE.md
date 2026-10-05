@@ -34,6 +34,8 @@ One publication goes through up to three request types, chained via `request.use
 
 The partially built `PostItem` travels in `userData.item` and is pushed to the dataset by whichever stage is last for the current options. `failedRequestHandler` in `src/main.ts` pushes the item anyway when a `POST` or `COMMENTS` request fails, so a post is never lost because of its details.
 
+Every item goes to the dataset through `pushPosts` in `src/charging.ts`, never through the handler's own `pushData`. It charges the pay-per-event events (`post` or `post-with-content` depending on whether `bodyHtml` was loaded, plus `comment` per comment) and aborts the crawler when the user's maximum run cost is reached. The event names must match the ones configured in Apify Console (Publication → Monetization), and the prices live there and in the README pricing table, not in code. To exercise charging locally, run the built Actor with `ACTOR_TEST_PAY_PER_EVENT=1 ACTOR_MAX_TOTAL_CHARGE_USD=<n> ACTOR_USE_CHARGING_LOG_DATASET=1`; every event then costs $1 and the charges land in `storage/datasets/charging_log/`.
+
 Things that are not obvious from a single file:
 
 - The per-publication post tally lives in `crawler.useState` (`CrawlState`), keyed by the normalized publication URL, so it survives migrations. Archive pages of one publication are fetched sequentially, which keeps the tally race-free.

@@ -76,6 +76,19 @@ One dataset item per post:
 
 `comments` is present only when `includeComments` is on. Replies keep a reference to the parent comment in `parentId`.
 
+## Pricing
+
+The Actor uses pay-per-event pricing. You pay only for the data that lands in the dataset:
+
+| Event | Charged for | Price | Per 1,000 |
+| --- | --- | --- | --- |
+| `post` | A post without the body (`includeBody` off, or the body could not be loaded) | $0.001 | $1.00 |
+| `post-with-content` | A post with `bodyHtml` | $0.002 | $2.00 |
+| `comment` | Each comment returned in `comments` | $0.0005 | $0.50 |
+| `apify-actor-start` | Each run, once | $0.00005 | — |
+
+A post is charged as either `post` or `post-with-content`, never both. When the maximum cost per run that you set is reached, the Actor stops and keeps what it has already saved.
+
 ## Limitations
 
 - Only publicly available content is returned. For paid posts (`isPaid: true`) the body contains just the part Substack shows without a subscription.

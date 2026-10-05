@@ -1,5 +1,6 @@
 import { createCheerioRouter } from '@crawlee/cheerio';
 
+import { pushPosts } from './charging.js';
 import type {
     ArchiveUserData,
     CrawlState,
@@ -28,7 +29,7 @@ export const createRouter = (options: ScrapeOptions) => {
         userData: { item, apiBaseUrl } satisfies PostUserData,
     });
 
-    router.addHandler<ArchiveUserData>(LABELS.ARCHIVE, async ({ request, response, json, crawler, log, pushData }) => {
+    router.addHandler<ArchiveUserData>(LABELS.ARCHIVE, async ({ request, response, json, crawler, log }) => {
         const { publicationUrl, offset } = request.userData;
 
         if (!Array.isArray(json)) {
@@ -60,7 +61,7 @@ export const createRouter = (options: ScrapeOptions) => {
         } else if (options.includeComments) {
             await crawler.addRequests(items.map((item) => commentsRequest(item, apiBaseUrl)));
         } else {
-            await pushData(items);
+            await pushPosts(items, crawler);
         }
 
         log.info(`Found ${posts.length} posts`, { publicationUrl, offset, total });
@@ -77,7 +78,7 @@ export const createRouter = (options: ScrapeOptions) => {
         }
     });
 
-    router.addHandler<PostUserData>(LABELS.POST, async ({ request, json, crawler, log, pushData }) => {
+    router.addHandler<PostUserData>(LABELS.POST, async ({ request, json, crawler, log }) => {
         const { item, apiBaseUrl } = request.userData;
         const post = json as Partial<RawPost> | undefined;
 
@@ -93,15 +94,15 @@ export const createRouter = (options: ScrapeOptions) => {
             return;
         }
 
-        await pushData(item);
+        await pushPosts([item], crawler);
     });
 
-    router.addHandler<PostUserData>(LABELS.COMMENTS, async ({ request, json, pushData }) => {
+    router.addHandler<PostUserData>(LABELS.COMMENTS, async ({ request, json, crawler }) => {
         const { item } = request.userData;
         const comments = (json as { comments?: RawComment[] } | undefined)?.comments;
 
         item.comments = Array.isArray(comments) ? flattenComments(comments, options.maxCommentsPerPost) : [];
-        await pushData(item);
+        await pushPosts([item], crawler);
     });
 
     return router;

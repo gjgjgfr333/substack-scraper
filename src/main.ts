@@ -5,6 +5,7 @@ import { Actor, log } from 'apify';
 
 // this is ESM project, and as such, it requires you to specify extensions in your relative imports
 // note that we need to use `.js` even when inside TS files
+import { pushPosts } from './charging.js';
 import { createRouter } from './routes.js';
 import type { ArchiveUserData, Input, PostUserData } from './types.js';
 import { buildArchiveUrl, LABELS, normalizePublicationUrl } from './utils.js';
@@ -38,7 +39,7 @@ const crawler = new CheerioCrawler({
     additionalMimeTypes: ['application/json'],
     maxConcurrency: 10,
     requestHandler: createRouter({ maxPostsPerPublication, sort, includeBody, includeComments, maxCommentsPerPost }),
-    failedRequestHandler: async ({ request, pushData }, error) => {
+    failedRequestHandler: async ({ request, crawler: failedCrawler }, error) => {
         if (request.label === LABELS.ARCHIVE) {
             const { publicationUrl } = request.userData as ArchiveUserData;
             log.warning('Could not load the publication archive, check that the publication exists', {
@@ -51,7 +52,7 @@ const crawler = new CheerioCrawler({
         // Keep the post even when its body or comments could not be loaded
         const { item } = request.userData as PostUserData;
         log.warning('Could not load post details, saving the post without them', { url: item.url });
-        await pushData(item);
+        await pushPosts([item], failedCrawler);
     },
 });
 
