@@ -2,7 +2,7 @@
 	"name": "substack-scraper",
 	"version": "0.0.1",
 	"type": "module",
-	"description": "This is a boilerplate of an Apify Actor.",
+	"description": "Apify Actor that scrapes posts and comments from Substack publications.",
 	"engines": {
 		"node": ">=22"
 	},

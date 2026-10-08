@@ -3,7 +3,7 @@
     "actorSpecification": 1,
     "name": "substack-scraper",
     "title": "Substack Scraper",
-    "description": "Scrape posts from any Substack publication: titles, dates, authors, tags, reactions, comments and the post body.",
+    "description": "Scrape posts from any Substack newsletter without login: titles, dates, authors, tags, likes, restacks, the full post body and public comments. Export to JSON, CSV or Excel, or use the API.",
     "version": "0.0",
     "buildTag": "latest",
     "meta": {
